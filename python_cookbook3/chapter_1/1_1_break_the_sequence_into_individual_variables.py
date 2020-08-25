@@ -2,7 +2,7 @@
 # @Author: yangbaihua
 # @Date  :  2020/08/25 21:29
 
-class break_the_sequence_into_individual_variables:
+class BreakSequenceIntoIndividualVar:
     #元组
     def break_tuple_into_individual_variables(p):
         #p = (4, 5)
@@ -39,7 +39,7 @@ class break_the_sequence_into_individual_variables:
         print("price:", price)
 
 if __name__ == '__main__':
-    cls = break_the_sequence_into_individual_variables()
+    cls = BreakSequenceIntoIndividualVar()
     p = (4,5)
     cls.break_tuple_into_individual_variables(p)
     #cls.break_tuple_into_individual_variables((4,6,7)) #报错  数量不匹配

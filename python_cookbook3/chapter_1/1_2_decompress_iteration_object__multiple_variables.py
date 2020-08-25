@@ -6,7 +6,7 @@
 from locust.stats import avg
 
 #扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的
-class decompress_iteration_object__multiple_variables:
+class DecompressIterationObjectMultipleVar:
     # 排除掉第一个和最后一个分数
     def drop_first_last(grades):
         grades = sorted(grades)
@@ -57,14 +57,21 @@ class decompress_iteration_object__multiple_variables:
         print('name:',name)
         print('year:',year)
 
-    def split_the_list_into_two_parts():
-        items = [1,10,7,4,5,9]
+    def split_the_list_into_two_parts(items):
+        #items = [1,10,7,4,5,9]
         head,*tail = items
         print('head:',head)
         print('tail:',tail)
 
+    #递归的探索
+    def recursive_algorithm_for_segmentation(items):
+        def sum(items):
+            head,*tail = items
+            return head + sum(tail) if tail else head
+        return sum(items)
+
 if __name__ == '__main__':
-    cls = decompress_iteration_object__multiple_variables
+    cls = DecompressIterationObjectMultipleVar
     grades = [89, 50, 96, 46, 77, 83, 99, 54, 100, 85]
     print("原始数据,", grades)
     print("去掉最大，最小的平均值", cls.drop_first_last(grades))
@@ -86,4 +93,7 @@ if __name__ == '__main__':
 
     cls.ignore_list_elements()
 
-    cls.split_the_list_into_two_parts()
+    items = [1, 10, 7, 4, 5, 9]
+    cls.split_the_list_into_two_parts(items)
+
+    print('items:',cls.recursive_algorithm_for_segmentation(items))

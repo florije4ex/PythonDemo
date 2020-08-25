@@ -16,6 +16,22 @@ class KeepTheLastNElements:
                 yield line,previous_lines
             previous_lines.append(line)
 
+    #deque(maxlen=N) 构造函数会新建一个固定大小的队列
+    def dequeTest(num):
+        q = deque(maxlen=num)
+        q.append(1)
+        q.append(2)
+        q.append(3)
+        print('q:',q)
+        q.append(4)
+        print('q:',q)
+        q.appendleft(6)
+        print('q:',q)
+        q.pop()
+        print('q:',q)
+        q.popleft()
+        print('q:', q)
+
 if __name__ == '__main__':
     cls = KeepTheLastNElements
     with open(r'somefile.txt') as f:
@@ -24,3 +40,6 @@ if __name__ == '__main__':
                 print("!!!!",pline,end='')
             print("$$$$",line,end='')
             print('-'*20)
+
+    cls.dequeTest(3)
+    cls.dequeTest(None)

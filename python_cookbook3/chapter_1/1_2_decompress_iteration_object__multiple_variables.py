@@ -26,6 +26,7 @@ class decompress_iteration_object__multiple_variables:
         trailing_avg = sum(trailing_qtrs)/len(trailing_qtrs)
         return trailing_avg,current_qtr,trailing_qtrs
 
+    #可变长元组的序列
     def tag_tuple_sequence():
         records=[
             ('foo',1,2),
@@ -41,6 +42,26 @@ class decompress_iteration_object__multiple_variables:
                do_foo(*args)
             if tag == 'bar':
                 do_bar(*args)
+
+    def split_string():
+        line = 'nobody:*:-2:-2:Unprivileged User:/var/empty:/usr/bin/false'
+        uname,*fields,homedir,sh = line.split(':')
+        print('uname:',uname)
+        print('fields:',fields)
+        print('homedir:',homedir)
+        print('sh:',sh)
+
+    def ignore_list_elements():
+        record = ('ACME',50,123.45,(12,18,2012))
+        name,*_,(*_,year) = record
+        print('name:',name)
+        print('year:',year)
+
+    def split_the_list_into_two_parts():
+        items = [1,10,7,4,5,9]
+        head,*tail = items
+        print('head:',head)
+        print('tail:',tail)
 
 if __name__ == '__main__':
     cls = decompress_iteration_object__multiple_variables
@@ -60,3 +81,9 @@ if __name__ == '__main__':
     print('当月值：',cls.start_using_the_list(sales_record)[1])
 
     cls.tag_tuple_sequence()
+
+    cls.split_string()
+
+    cls.ignore_list_elements()
+
+    cls.split_the_list_into_two_parts()

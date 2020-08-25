@@ -5,7 +5,7 @@
 # *号表达式
 from locust.stats import avg
 
-
+#扩展的迭代解压语法是专门为解压不确定个数或任意个数元素的可迭代对象而设计的
 class decompress_iteration_object__multiple_variables:
     # 排除掉第一个和最后一个分数
     def drop_first_last(grades):
@@ -26,7 +26,21 @@ class decompress_iteration_object__multiple_variables:
         trailing_avg = sum(trailing_qtrs)/len(trailing_qtrs)
         return trailing_avg,current_qtr,trailing_qtrs
 
-
+    def tag_tuple_sequence():
+        records=[
+            ('foo',1,2),
+            ('bar','hello'),
+            ('foo',3,4)
+        ]
+        def do_foo(x,y):
+            print('foo',x,y)
+        def do_bar(s):
+            print('bar',s)
+        for tag,*args in records:
+            if tag == 'foo':
+               do_foo(*args)
+            if tag == 'bar':
+                do_bar(*args)
 
 if __name__ == '__main__':
     cls = decompress_iteration_object__multiple_variables
@@ -44,3 +58,5 @@ if __name__ == '__main__':
     print('前七个月：',cls.start_using_the_list(sales_record)[2])
     print('前7个月销售额平均值：',cls.start_using_the_list(sales_record)[0])
     print('当月值：',cls.start_using_the_list(sales_record)[1])
+
+    cls.tag_tuple_sequence()

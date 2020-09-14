@@ -10,12 +10,12 @@ def update_sales_order_sql(self, SelectField, updateField):
     sql = 'UPDATE {table} SET '.format(table=table)
     update = ','.join(['%s = %r' % (key, updateField[key]) for key in updateField])  # 拼接需要更新的字段
     where = ' AND '.join(['%s = %r' % (key, SelectField[key]) for key in SelectField])  # 拼接查询字段
-    where = ' WHERE ' + where
+    where = 'WHERE ' + where
     sql += update
     sql += where  # 完成sql拼装
     try:
         if self._db_sales_client.executeSQL(sql):
-            print('SQL Update Successful')
+            print('SQL  Update Successful')
     except:
         print('SQL Update Fail')
 

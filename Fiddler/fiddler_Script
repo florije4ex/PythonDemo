@@ -192,7 +192,7 @@ class Handlers
 
 		//oSession.utilReplaceInRequest(requestString,requestReplaceString);
 
-
+        oSession.oRequest["X-Forwarded-For"]="182.118.99.12"
 
 		if (oSession.uriContains(".szy.com")) {	oSession["ui-color"] = "blue";oSession["ui-bold"]="QuickExec"; }
 		if (oSession.uriContains(".szy.cn")) {	oSession["ui-color"] = "green";	oSession["ui-bold"]="QuickExec"; }

@@ -19,6 +19,27 @@ def update_sales_order_sql(self, SelectField, updateField):
     except:
         print('SQL Update Fail')
 
+#第二个版本
+    def update_sales_order_sql(self, **alteration, **conditions):
+        sql = 'UPDATE {table} SET '.format(table=self.table)
+        update = ','.join(['%s = %r' % (k, v) for (k, v) in alteration.items()])  # 拼接需要更新的字段
+        sql = sql + update + 'WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in conditions.items()])  # 拼接查询字段
+        try:
+            if self._db_sales_client.executeSQL(sql):
+                print('SQL  Update Successful')
+        except:
+            print('SQL Update Fail')
+
+
+def del_sql(self, **kwargs):
+    sql = 'DELETE FROM {table}'.format(table=self.table)
+    sql = sql + ' WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in kwargs.items()])
+    try:
+        if self._db_hms_client.executeSQL(sql):
+            print('SQL Del Successful')
+    except:
+        print('SQL Del Fail')
+
 
 def select_sales_order_info_sql(self, SelectField):
     table = 't_sales_order'

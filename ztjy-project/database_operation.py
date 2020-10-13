@@ -52,3 +52,26 @@ def select_sales_order_info_sql(self, SelectField):
         print("SQL Select Successful")
     except:
         print("SQL Select FAIL")
+
+#第二个版本
+    def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', limitStart: int = '1',
+                   limitNum: int = '1', **kwargs):
+        sqlSelct = 'SELECT * from {table}'.format(table=self.table)
+        if orderBy != '':
+            sqlWhere = sqlSelct + ' WHERE ' + ' AND '.join(
+                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+            sql = sqlWhere + ' ORDER BY {orderBy} {sort}'.format(orderBy=orderBy,
+                                                                 sort=sort) + ' LIMIT {limit},{num}'.format(
+                limit=limitStart, num=limitNum)
+        elif groupBy != '':
+            sqlSelct = sqlSelct.replace('*', groupBy)
+            sql = sqlSelct + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
+        else:
+            sql = sqlSelct + ' WHERE ' + ' AND '.join(
+                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+        try:
+            result = self._db_hms_client.executeSQL(sql)
+            print("SQL Select Successful")
+            return result
+        except:
+            print("SQL Select FAIL")

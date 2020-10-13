@@ -4,6 +4,18 @@
 # @Department:研发部-测试一组
 # @Time    : 2020/9/9 9:59
 
+# pom.xml 文件增加
+<dependency>
+  <groupId>com.ztjy</groupId>
+  <artifactId>ztjy-sales-openservice-facade</artifactId>
+  <version>1.3.6-SNAPSHOT</version>
+</dependency>
+#maven引入
+java_maven_init()
+print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sales.model.order.PayOrderRequest'))
+#枚举不是常规的类，不是json，无法使用
+print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sales.enums.PayChannel'))
+
 def generator_params1(self, *args):
     params = []
     for arg in args:

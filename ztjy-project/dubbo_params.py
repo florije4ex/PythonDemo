@@ -7,6 +7,17 @@
 def generator_params1(self, *args):
     params = []
     for arg in args:
+        if arg is None:
+            params.append({"type": "java.lang.String", "data": None})
+        if arg == '':
+            params.append({"type": "java.lang.String", "data": ''})
+        else:
+            params.append({"type": "java.lang.String", "data": arg})
+    return params
+
+def generator_params1(self, *args):
+    params = []
+    for arg in args:
         if isinstance(arg, int):
             params.append({"type": "java.lang.Long", "data": arg})
         if isinstance(arg, str):

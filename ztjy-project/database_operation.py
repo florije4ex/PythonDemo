@@ -100,3 +100,43 @@ def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', l
         return result
     except:
         print("SQL Select FAIL")
+
+    def update_sql(self, classId: str = '', **alteration):
+        updateSql = 'UPDATE {table} SET '.format(table=self.table)
+        sql = updateSql + ','.join([' %s = % r ' % (k, v) for (k, v) in alteration.items()])
+        if classId != '':
+            sql = sql + ' WHERE ' + ' AND '.join([' ID = %r ' % classId])  # 拼接查询字段
+        try:
+            if self._db_school_client.executeSQL(sql):
+                time.sleep(self.sleepTime)
+        except:
+            print('t_class SQL Update Fail')
+
+def select_sql(self, isDistinct: str = '', deduplField: str = '', groupBy: str = '', orderBy: str = '',
+               sort: str = 'DESC', limitStart: int = '1', limitNum: int = '1', **kwargs):
+    sqlSelct = 'SELECT * from {table}'.format(table=self.table)
+    if orderBy != '':
+        # 排序
+        sql = sqlSelct + ' WHERE ' + ' AND '.join(['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
+                                                   kwargs.items()]) + ' ORDER BY {orderBy} {sort}'.format(
+            orderBy=orderBy, sort=sort) + ' LIMIT {limit},{num}'.format(limit=limitStart, num=limitNum)
+    elif groupBy != '':
+        # 根据字段聚合
+        sql = sqlSelct.replace('*', groupBy) + ' WHERE ' + ' AND '.join(
+            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
+             kwargs.items()]) + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
+        if isDistinct != '':
+            # 去重
+            sql = sql.replace(deduplField, 'DISTINCT(%s)' % deduplField, 1)
+    elif deduplField != '':
+        sql = sqlSelct.replace('*', deduplField) + ' WHERE ' + ' AND '.join(
+            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+    else:
+        sql = sqlSelct + ' WHERE ' + ' AND '.join(
+            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+    try:
+        result = self._db_school_client.executeSQL(sql)
+        print("t_class SQL Select Successful")
+        return result
+    except:
+        print("t_class SQL Select FAIL")

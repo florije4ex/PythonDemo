@@ -4,6 +4,19 @@
 # @Department:研发部-测试一组
 # @Time    : 2020/9/1 15:08
 
+for i in range(len(result)):
+    assert_that(data[i]['DICT_CLASS_CODE']).is_equal_to(result[i]['dictClassCode'])
+
+def insert_sql(self, **alterations):
+    dbfields = str(tuple(alterations.keys())).replace("'", '')
+    dbvalues = tuple(alterations.values())
+    sql = 'INSERT INTO {table} {dbfields} VALUES {dbvalues}'.format(table=self.table, dbfields=dbfields,
+                                                                    dbvalues=dbvalues)
+    try:
+        if self._db_hms_client.executeSQL(sql):
+            print('SQL Insert Successful')
+    except:
+        print('SQL Insert Fail')
 
 def update_sales_order_sql(self, SelectField, updateField):
     table = 't_sales_order'  # 表
@@ -20,15 +33,15 @@ def update_sales_order_sql(self, SelectField, updateField):
         print('SQL Update Fail')
 
 #第二个版本
-    def update_sales_order_sql(self, **alteration, **conditions):
-        sql = 'UPDATE {table} SET '.format(table=self.table)
-        update = ','.join(['%s = %r' % (k, v) for (k, v) in alteration.items()])  # 拼接需要更新的字段
-        sql = sql + update + 'WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in conditions.items()])  # 拼接查询字段
-        try:
-            if self._db_sales_client.executeSQL(sql):
-                print('SQL  Update Successful')
-        except:
-            print('SQL Update Fail')
+def update_sales_order_sql(self, **alteration, **conditions):
+    sql = 'UPDATE {table} SET '.format(table=self.table)
+    update = ','.join(['%s = %r' % (k, v) for (k, v) in alteration.items()])  # 拼接需要更新的字段
+    sql = sql + update + 'WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in conditions.items()])  # 拼接查询字段
+    try:
+        if self._db_sales_client.executeSQL(sql):
+            print('SQL  Update Successful')
+    except:
+        print('SQL Update Fail')
 
 
 def del_sql(self, **kwargs):
@@ -52,26 +65,38 @@ def select_sales_order_info_sql(self, SelectField):
         print("SQL Select Successful")
     except:
         print("SQL Select FAIL")
+#第一个版本
+def select_sql(self, **kwargs):
+    sqlSelct = 'SELECT * from {table}'.format(table=self.table)
+    sql = sqlSelct + ' WHERE ' + ' AND '.join(
+        ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+
+    try:
+        result = self._db_hms_client.executeSQL(sql)
+        print("SQL Select Successful")
+        return result
+    except:
+        print("SQL Select FAIL")
 
 #第二个版本
-    def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', limitStart: int = '1',
-                   limitNum: int = '1', **kwargs):
-        sqlSelct = 'SELECT * from {table}'.format(table=self.table)
-        if orderBy != '':
-            sqlWhere = sqlSelct + ' WHERE ' + ' AND '.join(
-                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
-            sql = sqlWhere + ' ORDER BY {orderBy} {sort}'.format(orderBy=orderBy,
-                                                                 sort=sort) + ' LIMIT {limit},{num}'.format(
-                limit=limitStart, num=limitNum)
-        elif groupBy != '':
-            sqlSelct = sqlSelct.replace('*', groupBy)
-            sql = sqlSelct + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
-        else:
-            sql = sqlSelct + ' WHERE ' + ' AND '.join(
-                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
-        try:
-            result = self._db_hms_client.executeSQL(sql)
-            print("SQL Select Successful")
-            return result
-        except:
-            print("SQL Select FAIL")
+def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', limitStart: int = '1',
+               limitNum: int = '1', **kwargs):
+    sqlSelct = 'SELECT * from {table}'.format(table=self.table)
+    if orderBy != '':
+        sqlWhere = sqlSelct + ' WHERE ' + ' AND '.join(
+            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+        sql = sqlWhere + ' ORDER BY {orderBy} {sort}'.format(orderBy=orderBy,
+                                                             sort=sort) + ' LIMIT {limit},{num}'.format(
+            limit=limitStart, num=limitNum)
+    elif groupBy != '':
+        sqlSelct = sqlSelct.replace('*', groupBy)
+        sql = sqlSelct + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
+    else:
+        sql = sqlSelct + ' WHERE ' + ' AND '.join(
+            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+    try:
+        result = self._db_hms_client.executeSQL(sql)
+        print("SQL Select Successful")
+        return result
+    except:
+        print("SQL Select FAIL")

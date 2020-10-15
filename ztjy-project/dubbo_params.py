@@ -16,6 +16,54 @@ print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sa
 #枚举不是常规的类，不是json，无法使用
 print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sales.enums.PayChannel'))
 
+
+def generator_params(self, **kwargs):
+    params = []
+    for k, v in kwargs.items():
+        if isinstance(v, list):
+            if k == 'classIdSet':
+                params.append({"type": "java.util.Set", "data": v})
+            else:
+                params.append({"type": "java.util.List", "data": v})
+        elif k == 'isFlag':
+            params.append({"type": "java.lang.Byte", "data": v})
+        elif k == 'lastDate':
+            params.append({"type": "java.util.Date", "data": {"format": "yyyy-MM-dd HH:mm:ss", "datetime": "%s"}})
+        else:
+            params.append({"type": "java.lang.String", "data": v})
+    return params
+
+def generator_params(self, **kwargs):
+    params = []
+    for k,v in kwargs.items():
+        if isinstance(v, list):
+            if k == 'classIdSet':
+                if v is None:
+                    params.append({"type": "java.util.Set", "data": []})
+                if v == '':
+                    params.append({"type": "java.util.Set", "data": ['']})
+                else:
+                    params.append({"type": "java.util.Set", "data": v})
+            else:
+                params.append({"type": "java.util.List", "data": v})
+        elif k == 'isFlag':
+            if v is None:
+                params.append({"type": "java.lang.Byte", "data": "null"})
+            if v == '':
+                params.append({"type": "java.lang.Byte", "data": ''})
+            else:
+                params.append({"type": "java.lang.Byte", "data": v})
+        elif k == 'lastDate':
+            params.append({"type":"java.util.Date","data":{"format":"yyyy-MM-dd HH:mm:ss","datetime":"%s"}})
+        else:
+            if v is None:
+                params.append({"type": "java.lang.String", "data": "null"})
+            if v == '':
+                params.append({"type": "java.lang.String", "data": ''})
+            else:
+                params.append({"type": "java.lang.String", "data": v})
+    return params
+
 def generator_params1(self, *args):
     params = []
     for arg in args:

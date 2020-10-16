@@ -112,31 +112,47 @@ def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', l
         except:
             print('t_class SQL Update Fail')
 
-def select_sql(self, isDistinct: str = '', deduplField: str = '', groupBy: str = '', orderBy: str = '',
-               sort: str = 'DESC', limitStart: int = '1', limitNum: int = '1', **kwargs):
-    sqlSelct = 'SELECT * from {table}'.format(table=self.table)
-    if orderBy != '':
-        # 排序
-        sql = sqlSelct + ' WHERE ' + ' AND '.join(['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
-                                                   kwargs.items()]) + ' ORDER BY {orderBy} {sort}'.format(
-            orderBy=orderBy, sort=sort) + ' LIMIT {limit},{num}'.format(limit=limitStart, num=limitNum)
-    elif groupBy != '':
-        # 根据字段聚合
-        sql = sqlSelct.replace('*', groupBy) + ' WHERE ' + ' AND '.join(
-            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
-             kwargs.items()]) + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
-        if isDistinct != '':
-            # 去重
-            sql = sql.replace(deduplField, 'DISTINCT(%s)' % deduplField, 1)
-    elif deduplField != '':
-        sql = sqlSelct.replace('*', deduplField) + ' WHERE ' + ' AND '.join(
-            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
-    else:
-        sql = sqlSelct + ' WHERE ' + ' AND '.join(
-            ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
-    try:
-        result = self._db_school_client.executeSQL(sql)
-        print("t_class SQL Select Successful")
-        return result
-    except:
-        print("t_class SQL Select FAIL")
+class SCHOOL_USER_DB:
+    def __init__(self):
+        self._db_client = ZTJY_Mysql_Clients().db_hms_client
+        self.table = "t_school_user"
+
+    def select_sql(self, isDistinct: str = '', deduplField: str = '', groupBy: str = '', orderBy: str = '',
+                   sort: str = 'DESC', limitStart: int = '1', limitNum: int = '1', **kwargs):
+        sqlSelct = 'SELECT * from {table}'.format(table=self.table)
+        if orderBy != '':
+            # 排序
+            sql = sqlSelct + ' WHERE ' + ' AND '.join(['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
+                                                       kwargs.items()]) + ' ORDER BY {orderBy} {sort}'.format(
+                orderBy=orderBy, sort=sort) + ' LIMIT {limit},{num}'.format(limit=limitStart, num=limitNum)
+        elif groupBy != '':
+            # 根据字段聚合
+            sql = sqlSelct.replace('*', groupBy) + ' WHERE ' + ' AND '.join(
+                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in
+                 kwargs.items()]) + ' GROUP BY {groupBy} '.format(groupBy=groupBy)
+            if isDistinct != '':
+                # 去重
+                sql = sql.replace(deduplField, 'DISTINCT(%s)' % deduplField, 1)
+        elif deduplField != '':
+            sql = sqlSelct.replace('*', deduplField) + ' WHERE ' + ' AND '.join(
+                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+        else:
+            sql = sqlSelct + ' WHERE ' + ' AND '.join(
+                ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
+        try:
+            result = self._db_client.executeSQL(sql)
+            print("%s SQL Select Successful" % self.table)
+            return result
+        except:
+            print("%s SQL Select FAIL" % self.table)
+
+    def update_sql(self, *conditions, **alteration):
+        sql = 'UPDATE {table} SET '.format(table=self.table)
+        update = ','.join(['%s = %r' % (k, v) for (k, v) in alteration.items()])  # 拼接需要更新的字段
+        sql = sql + update + ' WHERE ' + ' AND '.join(
+            ['order_no = "%s"' % order_no for order_no in conditions])  # 拼接查询字段
+        try:
+            if self._db_client.executeSQL(sql):
+                print('%s SQL  Update Successful' % self.table)
+        except:
+            print('%s SQL Update Fail' % self.table)

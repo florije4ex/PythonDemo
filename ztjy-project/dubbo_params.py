@@ -64,15 +64,15 @@ def generator_params(self, **kwargs):
                 params.append({"type": "java.lang.String", "data": v})
     return params
 
-def generator_params1(self, *args):
+def generator_params(self, *kwargs):
     params = []
-    for arg in args:
-        if arg is None:
+    for k, v in kwargs:
+        if v == "null":
             params.append({"type": "java.lang.String", "data": None})
-        if arg == '':
+        elif v == "":
             params.append({"type": "java.lang.String", "data": ''})
         else:
-            params.append({"type": "java.lang.String", "data": arg})
+            params.append({"type": "java.lang.String", "data": v})
     return params
 
 def generator_params1(self, *args):
@@ -84,10 +84,24 @@ def generator_params1(self, *args):
             params.append({"type": "java.lang.String", "data": arg})
     return params
 
-def generator_params_oprLog(self, **kwargs):
-    data = {}
-    data.update(**kwargs)
-    params = [{'type': 'com.ztjy.hms.server.model.dto.OperLogDto', 'data': data}]
+
+def generator_dto_params(self, **kwargs):
+    params = {}
+    params.update(**kwargs)
+    return params
+
+
+def generator_params(self, **kwargs):
+    params = []
+    for k, v in kwargs.items():
+        if k == 'SchoolPasswordDTO':
+            params.append({'type': 'com.ztjy.hms.server.model.dto.SchoolPasswordDTO', 'data': v})
+        elif v == "null":
+            params.append({"type": "java.lang.String", "data": None})
+        elif v == "":
+            params.append({"type": "java.lang.String", "data": ''})
+        else:
+            params.append({"type": "java.lang.String", "data": v})
     return params
 
 

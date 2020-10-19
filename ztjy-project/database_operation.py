@@ -13,7 +13,7 @@ def insert_sql(self, **alterations):
     sql = 'INSERT INTO {table} {dbfields} VALUES {dbvalues}'.format(table=self.table, dbfields=dbfields,
                                                                     dbvalues=dbvalues)
     try:
-        if self._db_hms_client.executeSQL(sql):
+        if self._db_client.executeSQL(sql):
             print('SQL Insert Successful')
     except:
         print('SQL Insert Fail')
@@ -27,7 +27,7 @@ def update_sales_order_sql(self, SelectField, updateField):
     sql += update
     sql += where  # 完成sql拼装
     try:
-        if self._db_sales_client.executeSQL(sql):
+        if self._db_client.executeSQL(sql):
             print('SQL  Update Successful')
     except:
         print('SQL Update Fail')
@@ -38,7 +38,7 @@ def update_sales_order_sql(self, **alteration, **conditions):
     update = ','.join(['%s = %r' % (k, v) for (k, v) in alteration.items()])  # 拼接需要更新的字段
     sql = sql + update + 'WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in conditions.items()])  # 拼接查询字段
     try:
-        if self._db_sales_client.executeSQL(sql):
+        if self._db_client.executeSQL(sql):
             print('SQL  Update Successful')
     except:
         print('SQL Update Fail')
@@ -48,7 +48,7 @@ def del_sql(self, **kwargs):
     sql = 'DELETE FROM {table}'.format(table=self.table)
     sql = sql + ' WHERE ' + ' AND '.join(['%s = %r' % (k, v) for (k, v) in kwargs.items()])
     try:
-        if self._db_hms_client.executeSQL(sql):
+        if self._db_client.executeSQL(sql):
             print('SQL Del Successful')
     except:
         print('SQL Del Fail')
@@ -60,7 +60,7 @@ def select_sales_order_info_sql(self, SelectField):
     where = ' AND '.join(['%s = %r' % (key, SelectField[key]) for key in SelectField])  # 拼接查询字段
     sql += where  # 完成sql拼装
     try:
-        result = self._db_sales_client.executeSQL(sql)
+        result = self._db_client.executeSQL(sql)
         return result
         print("SQL Select Successful")
     except:
@@ -72,7 +72,7 @@ def select_sql(self, **kwargs):
         ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
 
     try:
-        result = self._db_hms_client.executeSQL(sql)
+        result = self._db_client.executeSQL(sql)
         print("SQL Select Successful")
         return result
     except:
@@ -95,7 +95,7 @@ def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', l
         sql = sqlSelct + ' WHERE ' + ' AND '.join(
             ['%s = %r' % (str(k).replace("'", ''), v) for (k, v) in kwargs.items()])
     try:
-        result = self._db_hms_client.executeSQL(sql)
+        result = self._db_client.executeSQL(sql)
         print("SQL Select Successful")
         return result
     except:
@@ -107,7 +107,7 @@ def select_sql(self, groupBy: str = '', orderBy: str = '', sort: str = 'DESC', l
         if classId != '':
             sql = sql + ' WHERE ' + ' AND '.join([' ID = %r ' % classId])  # 拼接查询字段
         try:
-            if self._db_school_client.executeSQL(sql):
+            if self._db_client.executeSQL(sql):
                 time.sleep(self.sleepTime)
         except:
             print('t_class SQL Update Fail')

@@ -17,6 +17,12 @@ print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sa
 print(DubboClient('zookeeper://zookeeper.szy.com:2181').object2Json('com.ztjy.sales.enums.PayChannel'))
 
 
+def generator_set_params(self, *args):
+    dataSet = []
+    for i in args:
+        dataSet.append({"type": "java.lang.String", "data": i})
+    return dataSet
+
 def generator_params(self, **kwargs):
     params = []
     for k, v in kwargs.items():

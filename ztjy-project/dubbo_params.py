@@ -70,7 +70,7 @@ def generator_params(self, **kwargs):
                 params.append({"type": "java.lang.String", "data": v})
     return params
 
-def generator_params(self, *kwargs):
+def generator_params(self, **kwargs):
     params = []
     for k, v in kwargs.items():
         if v == "null":
